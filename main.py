@@ -1,10 +1,11 @@
 import pygame
+import time
 
 # Initialize pygame
 pygame.init()
 
 # Set up display
-WIDTH, HEIGHT = 800, 600
+WIDTH, HEIGHT = 1000, 1000
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("2D Gravity Simulator")
 
@@ -13,8 +14,8 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
 # Define circle properties
-circle_pos = (400, 300)  # (x, y) position
-circle_radius = 30
+circle_pos = (100, 100)  # (x, y) position
+circle_radius = 50
 
 # Main loop
 running = True
