@@ -9,3 +9,5 @@ To install the required packages:
 
 To run the simulation:
 ```python3 main.py```
+
+<img width="600" alt="Moon's path around the Earth" src="https://github.com/user-attachments/assets/6c817274-fa3d-43f9-aa5a-af5bada0a336" />
