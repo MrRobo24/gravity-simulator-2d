@@ -8,6 +8,7 @@ class Body:
         self.position = position
         self.acceleration = acceleration
         self.force = force
+        self.locus = []
 
     def __repr__(self):
         return f"Body(name={self.name}, mass={self.mass}, radius={self.radius}, color={self.color})"
