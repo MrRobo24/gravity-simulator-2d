@@ -1,3 +1,5 @@
+from locus_properties import LocusProperties
+
 class Body:
     def __init__(self,
                  name: str,
@@ -8,7 +10,8 @@ class Body:
                  position: tuple = (0, 0),
                  acceleration: tuple = (0, 0),
                  force: tuple = (0, 0),
-                 track_locus: bool = False):
+                 locus_properties: LocusProperties = LocusProperties(),
+                 scale: float = 800):
         self.name = name
         self.color = color
         self.mass = mass
@@ -18,7 +21,8 @@ class Body:
         self.acceleration = acceleration
         self.force = force
         self.locus = []
-        self.track_locus = track_locus
+        self.locus_properties = locus_properties
+        self.scale = scale
 
     def __repr__(self):
         return f"Body(name={self.name}, mass={self.mass}, radius={self.radius}, color={self.color})"

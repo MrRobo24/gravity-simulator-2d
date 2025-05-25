@@ -1,16 +1,17 @@
 import pygame
 from body import Body
+from locus_properties import LocusProperties
 from physics import Physics
 
 # Initialize pygame
 pygame.init()
 
 # Set up display
-WIDTH, HEIGHT = 800, 800
+WIDTH, HEIGHT = 1680, 1050
 CENTRE = (WIDTH // 2, HEIGHT // 2)
 TIMESTEP = 60 * 60  # One hour in seconds
 AU = 1.496e11  # Astronomical Unit in meters
-SCALE = 20000 / AU  # 1 AU = 250 pixels
+SCALE = 800 / AU  # 1 AU = 250 pixels
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("2D Gravity Simulator")
 
@@ -28,25 +29,27 @@ AU = 1.496e11  # Astronomical Unit in meters
 earth = Body(
     name = "Earth",
     mass = 5.97219e24 ,  # Mass in kg
-    radius = 9,  # Radius in pixels
+    radius = 12,  # Radius in pixels
     color = BLUE,  # Color in RGB
     velocity = (0, 29784.8),  # Initial velocity in m/s
     position = (-AU, 0),  # Initial position
     acceleration = (0, 0),  # Initial acceleration
     force = (0, 0),  # Initial force
-    track_locus = True  # Disable locus tracking for the central body
+    locus_properties = LocusProperties(track_locus=True, width=1, color=BLUE),
+    scale = 10000  # Scale for the body
 )
 
 moon = Body(
     name = "Moon",
     mass = 7.34767309e22,  # Mass in kg
-    radius = 3,  # Radius in pixels
+    radius = 4,  # Radius in pixels
     color = GREY,  # Color in RGB
     velocity = (0, earth.velocity[1] + 1022),  # Initial velocity in m/s
     position = (-0.00257 * AU + earth.position[0], 0),  # Initial position
     acceleration = (0, 0),  # Initial acceleration
     force = (0, 0),  # Initial force
-    track_locus = True  # Enable locus tracking
+    locus_properties = LocusProperties(track_locus=True, width=1, color=GREY),
+    scale = 10000  # Scale for the body
 )
 
 sun = Body(
@@ -58,33 +61,34 @@ sun = Body(
     position = (0, 0),  # Initial position
     acceleration = (0, 0),  # Initial acceleration
     force = (0, 0),  # Initial force
-    track_locus = False  # Disable locus tracking for the central body
+    locus_properties = LocusProperties(track_locus=False, width=1, color=YELLOW),
+    scale = 800  # Scale for the body
 )
 
 bodies = [sun, earth, moon]
 
+CENTRAL_BODY_IDX = int(input("Enter the body index to focus the camera on (0 for Sun, 1 for Earth, 2 for Moon): "))
+SCALE = bodies[CENTRAL_BODY_IDX].scale / AU  # Scale based on the central body
+
 # Create a Physics instance
 physics = Physics()
 
-def get_scaled_pos(position: tuple) -> tuple:
-    # # Center the camera on Earth
-    # earth_pos = earth.position
-    
-    # Center the moon on Earth
-    earth_pos = moon.position
-    
+def get_scaled_pos(position: tuple, centre_on_pos = None) -> tuple:
+    if centre_on_pos == None:
+        centre_on_pos = bodies[CENTRAL_BODY_IDX].position
     return (
-        (position[0] - earth_pos[0]) * SCALE + CENTRE[0],
-        (position[1] - earth_pos[1]) * SCALE + CENTRE[1]
+        (position[0] - centre_on_pos[0]) * SCALE + CENTRE[0],
+        (position[1] - centre_on_pos[1]) * SCALE + CENTRE[1]
     )
 
 def draw_bodies(bodies) -> None:
     for body in bodies:
         pygame.draw.circle(screen, body.color, get_scaled_pos(body.position), body.radius)
         
-        if body.track_locus:
+        curr_locus_properties = body.locus_properties
+        if curr_locus_properties.track_locus:
             for pos in body.locus:
-                pygame.draw.circle(screen, WHITE, get_scaled_pos(pos), 1)
+                pygame.draw.circle(screen, curr_locus_properties.color, get_scaled_pos(pos), curr_locus_properties.width)
 
 def update_bodies(bodies):
     for body in bodies:
