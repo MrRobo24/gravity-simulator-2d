@@ -1,5 +1,14 @@
 class Body:
-    def __init__(self, name: str, mass: float, radius: float, color: tuple, velocity: tuple = (0, 0), position: tuple = (0, 0), acceleration: tuple = (0, 0), force: tuple = (0, 0)):
+    def __init__(self,
+                 name: str,
+                 mass: float,
+                 radius: float,
+                 color: tuple,
+                 velocity: tuple = (0, 0),
+                 position: tuple = (0, 0),
+                 acceleration: tuple = (0, 0),
+                 force: tuple = (0, 0),
+                 track_locus: bool = False):
         self.name = name
         self.color = color
         self.mass = mass
@@ -9,6 +18,7 @@ class Body:
         self.acceleration = acceleration
         self.force = force
         self.locus = []
+        self.track_locus = track_locus
 
     def __repr__(self):
         return f"Body(name={self.name}, mass={self.mass}, radius={self.radius}, color={self.color})"

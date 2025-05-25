@@ -55,4 +55,5 @@ class Physics:
             force_y = force_magnitude * (dist_y / distance)
             
             # Update the forces on both bodies
+            body1.force = (-force_x, -force_y)
             body2.force = (force_x, force_y)

@@ -10,7 +10,7 @@ WIDTH, HEIGHT = 1920, 1080
 CENTRE = (WIDTH // 2, HEIGHT // 2)
 TIMESTEP = 60 * 60  # One hour in seconds
 AU = 1.496e11  # Astronomical Unit in meters
-SCALE = 20000 / AU  # 1 AU = 250 pixels
+SCALE = 90000 / AU  # 1 AU = 250 pixels
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("2D Gravity Simulator")
 
@@ -33,7 +33,8 @@ first_body = Body(
     velocity = (0, 0),  # Initial velocity
     position = (0, 0),  # Initial position
     acceleration = (0, 0),  # Initial acceleration
-    force = (0, 0)  # Initial force
+    force = (0, 0),  # Initial force
+    track_locus = False  # Disable locus tracking for the central body
 )
 
 second_body = Body(
@@ -44,11 +45,37 @@ second_body = Body(
     velocity = (0, 1022),  # Initial velocity in m/s
     position = (-0.00257 * AU, 0),  # Initial position
     acceleration = (0, 0),  # Initial acceleration
-    force = (0, 0)  # Initial force
+    force = (0, 0),  # Initial force
+    track_locus = True  # Enable locus tracking
 )
+
+bodies = [first_body, second_body]
 
 # Create a Physics instance
 physics = Physics()
+
+def get_scaled_pos(position: tuple) -> tuple:
+    return (position[0] * SCALE + CENTRE[0], position[1] * SCALE + CENTRE[1])
+
+def draw_bodies(bodies) -> None:
+    for body in bodies:
+        pygame.draw.circle(screen, body.color, get_scaled_pos(body.position), body.radius)
+        
+        if body.track_locus:
+            for pos in body.locus:
+                pygame.draw.circle(screen, WHITE, get_scaled_pos(pos), 1)
+
+def update_bodies(bodies):
+    for i in range(len(bodies)):
+        for j in range(i + 1, len(bodies)):
+            first_body = bodies[i]
+            second_body = bodies[j]
+            
+            # Calculate the force of gravity between the two bodies
+            physics.calc_force_of_gravity(first_body, second_body)
+    
+    for body in bodies:
+        physics.calc_new_velocity_and_pos(body, TIMESTEP)
 
 # Main loop
 running = True
@@ -60,31 +87,11 @@ while running:
     # Fill screen with background color
     screen.fill(BLACK)
     
-    # Draw the solid circle
-    pygame.draw.circle(screen,
-                       first_body.color,
-                       (first_body.position[0] + CENTRE[0], first_body.position[1] + CENTRE[1]),
-                       first_body.radius)
+    draw_bodies(bodies)
     
-    pygame.draw.circle(screen,
-                       second_body.color,
-                       (second_body.position[0] * SCALE + CENTRE[0], second_body.position[1] * SCALE + CENTRE[1]),
-                       second_body.radius)
-    
-    # Draw the locus of the second body
-    for pos in second_body.locus:
-        pygame.draw.circle(screen, WHITE, (pos[0] * SCALE + CENTRE[0], pos[1] * SCALE + CENTRE[1]), 1)
-    
-    # Update display
     pygame.display.flip()
     
-    print(second_body.position, second_body.velocity, second_body.acceleration, second_body.force)
-    
-    physics.calc_force_of_gravity(first_body, second_body)
-    
-    # physics.calc_accelaration_by_force(first_body)
-    # physics.calc_new_velocity_and_pos(first_body, 0.01)
-    physics.calc_new_velocity_and_pos(second_body, TIMESTEP)
+    update_bodies(bodies)
     
     pygame.time.delay(10)
 
