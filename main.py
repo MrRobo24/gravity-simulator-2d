@@ -26,6 +26,19 @@ YELLOW = (255, 255, 0)
 # Define circle properties
 AU = 1.496e11  # Astronomical Unit in meters
 
+sun = Body(
+    name = "Sun",
+    mass = 1.989e30,  # Mass in kg
+    radius = 30,  # Radius in pixels
+    color = YELLOW,  # Color in RGB
+    velocity = (0, 0),  # Initial velocity
+    position = (0, 0),  # Initial position
+    acceleration = (0, 0),  # Initial acceleration
+    force = (0, 0),  # Initial force
+    locus_properties = LocusProperties(track_locus=False, width=1, color=YELLOW),
+    scale = 250  # Scale for the body
+)
+
 earth = Body(
     name = "Earth",
     mass = 5.97219e24 ,  # Mass in kg
@@ -52,22 +65,51 @@ moon = Body(
     scale = 10000  # Scale for the body
 )
 
-sun = Body(
-    name = "Sun",
-    mass = 1.989e30,  # Mass in kg
-    radius = 30,  # Radius in pixels
-    color = YELLOW,  # Color in RGB
-    velocity = (0, 0),  # Initial velocity
-    position = (0, 0),  # Initial position
+venus = Body(
+    name = "Venus",
+    mass = 4.8675e24,  # Mass in kg
+    radius = 10,  # Radius in pixels
+    color = (255, 165, 0),  # Color in RGB
+    velocity = (0, 35020),  # Initial velocity in m/s
+    position = (-0.723 * AU, 0),  # Initial position
     acceleration = (0, 0),  # Initial acceleration
     force = (0, 0),  # Initial force
-    locus_properties = LocusProperties(track_locus=False, width=1, color=YELLOW),
-    scale = 500  # Scale for the body
+    locus_properties = LocusProperties(track_locus=True, width=1, color=(255, 165, 0)),
+    scale = 10000  # Scale for the body
 )
 
-bodies = [sun, earth, moon]
+mercury = Body(
+    name = "Mercury",
+    mass = 3.3011e23,  # Mass in kg
+    radius = 6,  # Radius in pixels
+    color = (169, 169, 169),  # Color in RGB
+    velocity = (0, 47400),  # Initial velocity in m/s
+    position = (-0.387 * AU, 0),  # Initial position
+    acceleration = (0, 0),  # Initial acceleration
+    force = (0, 0),  # Initial force
+    locus_properties = LocusProperties(track_locus=True, width=1, color=(169, 169, 169)),
+    scale = 10000  # Scale for the body
+)
 
-CENTRAL_BODY_IDX = int(input("Enter the body index to focus the camera on (0 for Sun, 1 for Earth, 2 for Moon): "))
+mars = Body(
+    name = "Mars",
+    mass = 6.4171e23,  # Mass in kg
+    radius = 7,  # Radius in pixels
+    color = (255, 0, 0),  # Color in RGB
+    velocity = (0, 24077),  # Initial velocity in m/s
+    position = (-1.524 * AU, 0),  # Initial position
+    acceleration = (0, 0),  # Initial acceleration
+    force = (0, 0),  # Initial force
+    locus_properties = LocusProperties(track_locus=True, width=1, color=(255, 0, 0)),
+    scale = 10000  # Scale for the body
+)
+
+bodies = [sun, mercury, venus, earth, moon, mars]
+
+for idx, body in enumerate(bodies):
+    print(f"IDX: {idx} - {body.name}")
+    
+CENTRAL_BODY_IDX = int(input("Enter the body index to focus the camera on: "))
 SCALE = bodies[CENTRAL_BODY_IDX].scale / AU  # Scale based on the central body
 
 # Create a Physics instance
