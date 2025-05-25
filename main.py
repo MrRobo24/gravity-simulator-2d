@@ -62,7 +62,7 @@ sun = Body(
     acceleration = (0, 0),  # Initial acceleration
     force = (0, 0),  # Initial force
     locus_properties = LocusProperties(track_locus=False, width=1, color=YELLOW),
-    scale = 800  # Scale for the body
+    scale = 500  # Scale for the body
 )
 
 bodies = [sun, earth, moon]
