@@ -1,6 +1,6 @@
-from body import Body
-from constants import AU, YELLOW, BLUE, GREY
-from locus_properties import LocusProperties
+from .body import Body
+from .constants import AU, YELLOW, BLUE, GREY
+from .locus_properties import LocusProperties
 
 sun = Body(
     name = "Sun",

@@ -1,6 +1,6 @@
 import pygame
-from constants import WIDTH, HEIGHT, BLACK
-from solar_system import SolarSystem
+from .constants import WIDTH, HEIGHT, BLACK
+from .solar_system import SolarSystem
 
 class Graphics:
     """

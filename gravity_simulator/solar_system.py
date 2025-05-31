@@ -1,6 +1,6 @@
-from bodies import bodies
-from constants import TIMESTEP, AU, CENTRE
-from physics import Physics
+from .bodies import bodies
+from .constants import TIMESTEP, AU, CENTRE
+from .physics import Physics
 
 class SolarSystem:
     """

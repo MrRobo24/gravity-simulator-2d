@@ -1,4 +1,4 @@
-from locus_properties import LocusProperties
+from .locus_properties import LocusProperties
 
 class Body:
     """
